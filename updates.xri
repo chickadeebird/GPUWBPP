@@ -2,7 +2,7 @@
 <xri version="1.0">
    <description>
       <p>
-		First release of GPUWBPP Script from chickadeebird.
+		First release of GPUStacker Script from chickadeebird.
       </p>
       <p>
       The scripts have been written by Chick Dee (alias chickadeebird).
@@ -10,9 +10,9 @@
       </p>
    </description>
    <platform os="all" arch="noarch" version="1.8.9:2.0.0">
-      <package fileName="GPUWBPPv1.0.0.zip" sha1="eef0a4610714f3923e9a06da21dd36b021b8c644" type="script" releaseDate="20260419">
+      <package fileName="GPUWStackerv1.0.0.zip" sha1="df872630e3398c76eb7a0f17250d722c644bc10c" type="script" releaseDate="20260419">
          <title>
-            Script for GPUWBPP - GPU based stacking script for Pixinsight.
+            Script for GPUStacker - GPU based stacking script for Pixinsight.
          </title>
          <description>
             <p>
