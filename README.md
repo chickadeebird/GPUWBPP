@@ -1,10 +1,10 @@
-# GPUWBPP — GPU-Accelerated Weighted Batch PreProcessing
+# GPUStacker — GPU-Accelerated Weighted Batch PreProcessing
 
 ## 1. General Description
 
-GPUWBPP is a GPU-accelerated astrophotography image calibration, registration, and stacking pipeline built for use in PixInsight, although it does also have an experimental standalone GUI. It augments/complements the standard Weighted Batch PreProcessing (WBPP) workflow with a CUDA-optimized pipeline that dramatically reduces processing time while producing comparable or identical output quality. The pipeline is designed for **monochrome camera data** at this time — it processes single-channel FITS and XISF frames acquired through narrowband or broadband filters (L, R, G, B, Ha, OIII, SII, etc.) and produces per-filter stacked master .xisf images ready for color combination in PixInsight. At the present time is runs on Windows and is optimized for NVIDIA CUDA-based GPUs.
+GPUStacker is a GPU-accelerated astrophotography image calibration, registration, and stacking pipeline built for use in PixInsight, although it does also have an experimental standalone GUI. It augments/complements the standard Weighted Batch PreProcessing (WBPP) workflow with a CUDA-optimized pipeline that dramatically reduces processing time while producing comparable or identical output quality. The pipeline is designed for **monochrome camera data** at this time — it processes single-channel FITS and XISF frames acquired through narrowband or broadband filters (L, R, G, B, Ha, OIII, SII, etc.) and produces per-filter stacked master .xisf images ready for color combination in PixInsight. At the present time is runs on Windows and is optimized for NVIDIA CUDA-based GPUs.
 
-The system consists of two components: **AstroPipeline**, a standalone executable that performs the actual image processing using NVIDIA GPU acceleration via CUDA, and **GPUWBPP.js**, a PixInsight script that provides a graphical front-end for configuring and launching AstroPipeline from within PixInsight. The executable handles the entire workflow from raw calibration frames to final stacked output — master bias/dark/flat generation, per-frame calibration, star-based image registration with homography fitting, local normalization, optional satellite trail removal, PSF-based frame weighting, sigma-clipped mean stacking, and a final auto-crop.
+The system consists of two components: **AstroPipeline**, a standalone executable that performs the actual image processing using NVIDIA GPU acceleration via CUDA, and **GPUStacker.js**, a PixInsight script that provides a graphical front-end for configuring and launching AstroPipeline from within PixInsight. The executable handles the entire workflow from raw calibration frames to final stacked output — master bias/dark/flat generation, per-frame calibration, star-based image registration with homography fitting, local normalization, optional satellite trail removal, PSF-based frame weighting, sigma-clipped mean stacking, and a final auto-crop.
 
 Timing tests below were done using a typical imaging session with an ASI6200 camera (9576 × 6388 pixels) produces the following dataset (an alternative dataset using images from an STF8300 were also compared):
 
@@ -21,9 +21,9 @@ Processing this dataset through the complete pipeline (master generation, calibr
 | Method | Total Processing Time |
 |---|-----------------------|
 | PixInsight native WBPP (CPU) | **1 hour 58 minutes (118 minutes)** |
-| GPUWBPP / AstroPipeline | **14 minutes**        |
+| GPUStacker / AstroPipeline | **14 minutes**        |
 
-GPUWBPP achieves this speedup by performing nearly every computationally intensive operation on the GPU: background estimation, star detection, centroid computation, image warping (Lanczos-3 interpolation with homography projection), local normalization statistics, and the final sigma-clipped mean stack are all implemented as custom CUDA kernels or optimized CuPy operations.
+GPUStacker achieves this speedup by performing nearly every computationally intensive operation on the GPU: background estimation, star detection, centroid computation, image warping (Lanczos-3 interpolation with homography projection), local normalization statistics, and the final sigma-clipped mean stack are all implemented as custom CUDA kernels or optimized CuPy operations.
 
 The pipeline also includes an optional **satellite trail removal** stage that detects and masks satellite and aircraft trails prior to final stacking. This feature is particularly valuable for imaging sessions with fewer subexposures, where a single bright satellite trail may not be adequately rejected by standard sigma-clipping, or for datasets where suboptimal rejection conditions (low frame count, high noise, variable seeing) make statistical outlier rejection unreliable. The trail detection uses an algorithm to accurately identify linear features while preserving baseline image structure.
 
@@ -36,14 +36,14 @@ The pipeline also includes an optional **satellite trail removal** stage that de
 To automatically install and receive script updates in PixInsight, add the following URL to **Resources > Updates > Manage Repositories**:
 
 ```
-https://raw.githubusercontent.com/chickadeebird/GPUWBPP/main/
+https://raw.githubusercontent.com/chickadeebird/GPUStacker/main/
 ```
 
-After this has been added to the repositories, select **Resources > Updates > Check for Updates**. The new GPUWBPP script should appear under **Scripts > ChickadeeScripts**.
+After this has been added to the repositories, select **Resources > Updates > Check for Updates**. The new GPUStacker script should appear under **Scripts > ChickadeeScripts**.
 
 ### AstroPipeline Executable
 
-The GPUWBPP script calls an external executable (**AstroPipeline.exe** on Windows) that performs the actual GPU-accelerated image processing. The executable can be downloaded from the following link:
+The GPUStacker script calls an external executable (**AstroPipeline.exe** on Windows) that performs the actual GPU-accelerated image processing. The executable can be downloaded from the following link:
 
 **Windows (NVIDIA GPU required for speed optimizations):**
 
@@ -62,9 +62,9 @@ An executable for macOS and Linux versions is not available at this time.
 **Setup:**
 
 1. Download the zip file and extract its contents to a folder on your computer (e.g., `C:\AstroPipeline\`).
-2. Launch PixInsight and open the GPUWBPP script from **Scripts > ChickadeeScripts > GPUWBPP**.
-3. Click the **wrench icon** at the bottom left of the GPUWBPP dialog box.
-4. Navigate to the folder where the AstroPipeline executable has been placed and select it. This enables the GPUWBPP script to find the executable in the correct location.
+2. Launch PixInsight and open the GPUStacker script from **Scripts > ChickadeeScripts > GPUStacker**.
+3. Click the **wrench icon** at the bottom left of the GPUStacker dialog box.
+4. Navigate to the folder where the AstroPipeline executable has been placed and select it. This enables the GPUStacker script to find the executable in the correct location.
 5. The executable location is saved and persists across PixInsight sessions.
 
 ---
@@ -117,9 +117,9 @@ The final per-filter stack combines all calibrated, registered, locally normaliz
 
 ---
 
-## 4. GPUWBPP PixInsight Script
+## 4. GPUStacker PixInsight Script
 
-The GPUWBPP.js script provides a graphical interface within PixInsight for configuring and launching the AstroPipeline executable. The dialog is organized into three sections:
+The GPUStacker.js script provides a graphical interface within PixInsight for configuring and launching the AstroPipeline executable. The dialog is organized into three sections:
 
 ### Frame Directories
 
@@ -153,7 +153,7 @@ Clicking the red "Create masters, ..." button writes a platform-appropriate laun
 
 The AstroPipeline executable is currently available for **Windows** only, as the build and execution environment uses NVIDIA CUDA on Windows. Future releases may include:
 
-- **Linux**: The pipeline's Python codebase and CUDA kernels are platform-independent. A Linux build would require packaging with PyInstaller on a Linux system with the CUDA toolkit installed. The GPUWBPP.js script already includes Linux-compatible launcher script generation.
+- **Linux**: The pipeline's Python codebase and CUDA kernels are platform-independent. A Linux build would require packaging with PyInstaller on a Linux system with the CUDA toolkit installed. The GPUStacker.js script already includes Linux-compatible launcher script generation.
 - **macOS**: Apple Silicon Macs do not support NVIDIA CUDA, so a macOS port would require either a Metal Compute or OpenCL backend (replacing CuPy's CUDA kernels) or a CPU-only mode. The pipeline's CPU fallback paths are functional but significantly slower. macOS with external NVIDIA eGPUs (rare) could theoretically use the existing CUDA code.
 
 ### Color / RGB Image Support
@@ -167,7 +167,7 @@ A future release may implement native **three-plane (RGB) stacking** for one-sho
 - Apply per-channel calibration with color-aware flat correction
 - Produce a ready-to-process RGB color image directly from the pipeline
 
-This would extend GPUWBPP's applicability to the large community of astrophotographers using one-shot color cameras.
+This would extend GPUStacker's applicability to the large community of astrophotographers using one-shot color cameras.
 
 ### Additional Planned Improvements
 
