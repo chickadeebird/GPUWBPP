@@ -10,7 +10,7 @@
       </p>
    </description>
    <platform os="all" arch="noarch" version="1.8.9:2.0.0">
-      <package fileName="GPUStackerv1.0.0.zip" sha1="df872630e3398c76eb7a0f17250d722c644bc10c" type="script" releaseDate="20260419">
+      <package fileName="GPUWStackerv1.0.0.zip" sha1="7a482bf0e82d7054dcddbcd15a21be1762e6d10d" type="script" releaseDate="20260419">
          <title>
             Script for GPUStacker - GPU based stacking script for Pixinsight.
          </title>
