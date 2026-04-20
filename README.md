@@ -47,8 +47,14 @@ The GPUStacker script calls an external executable (**AstroPipeline.exe** on Win
 
 **Windows (NVIDIA GPU required for speed optimizations):**
 
+The following is used with CUDA version 12:
 ```
 https://drive.google.com/file/d/13WsyvtQUB95TwFeFFRZhxwdENl_HUIY9/view?usp=sharing
+```
+
+I understand that the RC astro suite only works with CUDA version 11, so this version will work on systems with CUDA version 11 so that both systems are compatible with this older CUDA version:
+```
+https://drive.google.com/file/d/1tByfYp5Nevty24CaRm9rVLZCQC5znwll/view?usp=sharing
 ```
 
 An executable for macOS and Linux versions is not available at this time.
